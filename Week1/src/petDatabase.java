@@ -49,9 +49,9 @@ public class petDatabase {
                 break;
             case 4: //removePet();
                 break;
-            case 5: //searchPetsByName();
+            case 5: searchPetsByName();
                 break;
-            case 6: //searchPetsByAge();
+            case 6: searchPetsByAge();
                 break;
             case 7: System.out.println("Goodbye!");
                 return;   
@@ -118,5 +118,30 @@ public class petDatabase {
             System.out.printf("|%3d |%10s |%4d |\n", i, pets[i].getName(), pets[i].getAge());
         }
     }//printTableRow end
+    
+    private static void searchPetsByName() {
+        s.nextLine();
+        System.out.print("Enter name to search: ");
+        String name = s.nextLine();
+        for (int i = 0; i < petCount; i++) {
+            if (pets[i].getName().equals(name)) {
+                printTableHeader();
+                System.out.printf("|%3d |%10s |%4d |\n", i, pets[i].getName(), pets[i].getAge());
+                printTableFooter();
+            }
+        }
+    }//searchPetsByName end
+
+    private static void searchPetsByAge() {
+        System.out.print("Enter age to search: ");
+        int age = s.nextInt();
+        for (int i = 0; i < petCount; i++) {
+            if (pets[i].getAge() == age) {
+                printTableHeader();
+                System.out.printf("|%3d |%10s |%4d |\n", i, pets[i].getName(), pets[i].getAge());
+                printTableFooter();
+                }
+            }
+    }//searchPetsByAge end
 
 }// petDatabase end
