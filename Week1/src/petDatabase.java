@@ -45,9 +45,9 @@ public class petDatabase {
                 break;
             case 2: addPets();
                 break;
-            case 3: //updatePet();
+            case 3: updatePet();
                 break;
-            case 4: //removePet();
+            case 4: removePet();
                 break;
             case 5: searchPetsByName();
                 break;
@@ -143,5 +143,33 @@ public class petDatabase {
                 }
             }
     }//searchPetsByAge end
+    
+    private static void updatePet() {
+        showAllPets();
+        s.nextLine();
+        System.out.print("Enter the ID you want to change: ");
+        int ID = s.nextInt();
+        s.nextLine();
+        System.out.print("New details: ");
+        String input = s.nextLine();
+        String[] petNameAndAge = input.split(" ");
+        String name = petNameAndAge[0];
+        int age = Integer.parseInt(petNameAndAge[1]);
+        pets[ID].setName(name);
+        pets[ID].setAge(age);
+    }//updatePet end
+    
+    private static void removePet() {
+        showAllPets();
+        System.out.print("Pet ID to remove: ");
+        int ID = s.nextInt();
+        Pet p = pets[ID];
+        for (int i = ID; i < petCount; i++) {
+            pets[i] = pets[i + 1];
+        }
+        System.out.print(p.getName() + " has been removed.");
+        pets[petCount] = null;
+        petCount--;
+    }//removePet end
 
 }// petDatabase end
