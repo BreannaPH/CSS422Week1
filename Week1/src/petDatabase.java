@@ -1,8 +1,11 @@
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * @author Breanna Price-Heuckendorf
- * CSC 422 Week 1 Assignment 1 Part 2
+ * CSC 422 
  */
 
 class Pet {
@@ -31,13 +34,28 @@ class Pet {
     }//setAge
 
 }//Pet class
+
 public class petDatabase {
 	static Pet[] pets = new Pet[100];
     static int petCount = 0;
-    static Scanner s = new Scanner(System.in);
-    
+    static Scanner s = new Scanner(System.in);    
     
 	public static void main(String[] args) {
+		List<String> list = new ArrayList<String>();
+		try {
+			// getting error that file cannot be found
+			// but file petList is included in src
+			Scanner sc = new Scanner(new File("petList"));
+			while (sc.hasNextLine()) {
+				list.add(sc.nextLine());
+			}
+			sc.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}// end of try catch
+		
+		System.out.println(list);
+		
 		while (true) {
             int choice = getUserChoice();
             switch (choice) {
@@ -45,15 +63,9 @@ public class petDatabase {
                 break;
             case 2: addPets();
                 break;
-            case 3: updatePet();
+            case 3: removePet();
                 break;
-            case 4: removePet();
-                break;
-            case 5: searchPetsByName();
-                break;
-            case 6: searchPetsByAge();
-                break;
-            case 7: System.out.println("Goodbye!");
+            case 4: System.out.println("Goodbye!");
                 return;   
             }// switch end
         }// while loop end
@@ -64,11 +76,8 @@ public class petDatabase {
         System.out.print("\n"+"What would you like to do?\n" +
         "1) View all pets\n" +
         "2) Add more pets\n" +
-        "3) Update an existing pet\n" +
-        "4) Remove an existing pet\n" +
-        "5) Search pets by name\n" +
-        "6) Search pets by age\n" +
-        "7) Exit program"+"\n\n");
+        "3) Remove an existing pet\n" +
+        "4) Exit program"+"\n\n");
         System.out.print("Your choice: ");
         int choice = s.nextInt();
         return choice;
@@ -96,6 +105,19 @@ public class petDatabase {
         System.out.println(counter + " pets added.");
     }//addPets end
 	
+	private static void removePet() {
+        showAllPets();
+        System.out.print("Pet ID to remove: ");
+        int ID = s.nextInt();
+        Pet p = pets[ID];
+        for (int i = ID; i < petCount; i++) {
+            pets[i] = pets[i + 1];
+        }
+        System.out.print(p.getName() + " has been removed.");
+        pets[petCount] = null;
+        petCount--;
+    }//removePet end
+	
 	private static void showAllPets() {
         printTableHeader();
         printTableRow();
@@ -119,6 +141,10 @@ public class petDatabase {
         }
     }//printTableRow end
     
+    
+    /* searchPetsByName(), searchPetsByAge(), and updatePet() not needed for 
+     * Milestone Load and Save & Error Handling
+     * 
     private static void searchPetsByName() {
         s.nextLine();
         System.out.print("Enter name to search: ");
@@ -159,17 +185,7 @@ public class petDatabase {
         pets[ID].setAge(age);
     }//updatePet end
     
-    private static void removePet() {
-        showAllPets();
-        System.out.print("Pet ID to remove: ");
-        int ID = s.nextInt();
-        Pet p = pets[ID];
-        for (int i = ID; i < petCount; i++) {
-            pets[i] = pets[i + 1];
-        }
-        System.out.print(p.getName() + " has been removed.");
-        pets[petCount] = null;
-        petCount--;
-    }//removePet end
+    */
+   
 
 }// petDatabase end
