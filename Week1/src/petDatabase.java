@@ -41,7 +41,8 @@ class Pet {
 public class petDatabase {
 	static Pet[] pets = new Pet[100];
     static int petCount = 0;
-    static Scanner s = new Scanner(System.in);    
+    static Scanner s = new Scanner(System.in);  
+    static int counter = 0;
     
 	public static void main(String[] args) {
 		// try and catch for reading from file 
@@ -109,31 +110,65 @@ public class petDatabase {
     }//getUserChoice end
 	
 	private static void addPets() {
-        int counter = 0;
+		if (counter == 4) {
+        	System.out.println("Error: Database is full.");
+        	return;
+        }
+        boolean oob = false;
+        String name = "";
+        int age = 0;
         s.nextLine();
         System.out.print("Enter 'done' to go back to menu\n");
-        while (true) {
+        while (true && counter < 5) { // supporting only 5 entries
             System.out.print("add pet (name, age): ");
             String input = s.nextLine();
             if (input.equals("done"))
                 break;
             String[] petNameAndAge = input.split(" ");
+            try {
+            	name = petNameAndAge[0];
+            	age = Integer.parseInt(petNameAndAge[1]);
+            } catch (ArrayIndexOutOfBoundsException e) {
+            	oob = true;
+            } catch (NumberFormatException f) {
+            	oob = true;
+            }
             
-            String name = petNameAndAge[0];
-            int age = Integer.parseInt(petNameAndAge[1]);
-            System.out.println(name +" " + age);
+            while (age > 20 || oob) {
+            	if (age > 20) {
+            		System.out.println("Error: " + age + " is not a valid age.");
+            	}
+            	if (oob) {
+            		System.out.println("Error: Pet must have a name and age");
+            	}
+            	System.out.print("add pet (name, age): ");
+                input = s.nextLine();
+                if (input.equals("done"))
+                    break;
+                petNameAndAge = input.split(" ");
+                
+                name = petNameAndAge[0];
+                age = Integer.parseInt(petNameAndAge[1]);
+            }// end of while - error handling age cannot be more than 20
+            
             Pet p = new Pet(name, age);
             pets[petCount] = p;
             petCount++;
             counter++;
+            
         }
+        
         System.out.println(counter + " pets added.");
     }//addPets end
 	
 	private static void removePet() {
-        showAllPets();
+		showAllPets();
         System.out.print("Pet ID to remove: ");
         int ID = s.nextInt();
+        if (ID > petCount || ID < 0) {
+        	System.out.println("Error: ID " + ID + " does not exist.");
+        	return;
+        }
         Pet p = pets[ID];
         for (int i = ID; i < petCount; i++) {
             pets[i] = pets[i + 1];
