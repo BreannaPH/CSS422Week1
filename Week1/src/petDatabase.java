@@ -1,7 +1,10 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import petDatabaseTest.Pet;
 
 /**
  * @author Breanna Price-Heuckendorf
@@ -41,20 +44,25 @@ public class petDatabase {
     static Scanner s = new Scanner(System.in);    
     
 	public static void main(String[] args) {
-		List<String> list = new ArrayList<String>();
+		// try and catch for reading from file 
+		// Load and Save milestone!
 		try {
-			// getting error that file cannot be found
-			// but file petList is included in src
 			Scanner sc = new Scanner(new File("petList"));
 			while (sc.hasNextLine()) {
-				list.add(sc.nextLine());
+				String input = sc.nextLine();
+				String [] petNameAndAge = input.split(" ");
+				String name = petNameAndAge[0];
+			          int age = Integer.parseInt(petNameAndAge[1]);
+			          Pet p = new Pet(name, age);
+			          pets[petCount] = p;
+			          petCount++;
 			}
+			System.out.println("File successfully read.");
 			sc.close();
 		} catch (Exception e) {
 			System.out.println(e);
-		}// end of try catch
-		
-		System.out.println(list);
+				}// end of try catch
+				// end of Load milestone
 		
 		while (true) {
             int choice = getUserChoice();
@@ -66,11 +74,28 @@ public class petDatabase {
             case 3: removePet();
                 break;
             case 4: System.out.println("Goodbye!");
+    			savePets();
                 return;   
             }// switch end
         }// while loop end
 
 	}// main end
+	
+	// save and load milestone
+	private static void savePets() {
+		try {
+			FileWriter myWriter = new FileWriter("petList");
+			for (int i = 0; i < petCount; i++) {
+				myWriter.write(pets[i].getName() + " " + pets[i].getAge()+ "\n");
+		       }
+			myWriter.close();
+			System.out.println("Sucessfully wrote to file.");
+		} catch (Exception e) {
+			System.out.println("An error occured, could not save to file.");
+			System.out.println(e);
+		}
+	}// end of savePets
+	// end of load milestone
 	
 	private static int getUserChoice() {
         System.out.print("\n"+"What would you like to do?\n" +
